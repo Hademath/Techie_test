@@ -1,0 +1,42 @@
+
+***************************QUESTION 1 ANSWER*******************************.
+These query  below will give second largest salary in the table.
+
+SELECT MAX(salary) FROM emp WHERE salary < (SELECT MAX(salary) FROM emp);
+SELECT salary FROM (SELECT DISTINCT salary FROM emp ORDER BY salary DESC LIMIT 2) AS emp ORDER BY salary LIMIT 1;
+
+
+COMMENT: The  option with DISTINCT and OFFSET 1 i.e option 1 will select the second largest only if the OFFSET comes after LIMIT 1.
+
+
+
+
+***************************QUESTION 2 ANSWER*******************************
+
+SELECT  city.country as Country, games.yr as Year FROM games INNER JOIN city ON games.city=city.name ORDER BY games.yr DESC;
+
+
+
+
+***************************QUESTION 3 ANSWER*******************************
+The SQL JOIN statements is used in  SQL  to combine rows from two or more tables  based on a relationship between certain columns in these tables.
+
+SQL RIGHT JOIN:
+ The RIGHT JOIN  returns all the rows  from the right table(city table), even if there are no matches in the left table(game table).
+  i,e all values in the city table will appear in the result
+ SELECT  games.city, games.yr, city.country FROM games RIGHT JOIN city ON games.city=city.name ORDER BY games.yr DESC
+
+
+SQL LEFT JOIN:
+The LEFT JOIN  returns all rows from the left table (games), even if there are no matches in the right table (city).
+ i,e all values in the game table will appear in the result
+ SELECT games.yr, games.city, city.country FROM games LEFT JOIN city ON games.city=city.name ORDER BY games.yr DESC
+
+
+
+ 
+ ***************************QUESTION 4 ANSWER*******************************
+THe  query that selects userId and the average session duration for each user with more than one session is showing below. 
+I count where userId appear more than 1, find the average value for the session and group it using the userId
+
+ SELECT userId, AVG(duration) FROM sessions GROUP BY userId HAVING COUNT(userId)>1
