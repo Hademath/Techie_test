@@ -9,6 +9,6 @@ class Score extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'student_id','subject','score', 'mean_score', 'media_score', 'mode_score'
+        'student_id','total_score', 'mean_score', 'median_score', 'mode_score'
     ];
 }

@@ -89,8 +89,9 @@ class StudentsController extends Controller
           $physics =$request->physics;
           $chemistry=$request->chemistry;
           $history=$request->history;
-
-           $recordScore = Subject::create([
+         
+           if(!$student){
+            $recordScore = Subject::create([
             'name' => $firstname,
             'user_id' => $id,
             'maths' => $maths,
@@ -99,28 +100,63 @@ class StudentsController extends Controller
              'chemistry' => $chemistry,
              'history'=> $history,
 
-        ]);
-        if($recordScore){
-            $recordScore=[];
-            // $totalScore = Subject::where('user_id', $id)->sum(DB::raw('maths + english + physics + chemistry + history'));
+                  ]);
+           }else{
+             $recordScore = Subject::where('user_id', $id)->update([
+            'name' => $firstname,
+            'user_id' => $id,
+            'maths' => $maths,
+            'english' => $english,
+            'physics' => $physics,
+            'chemistry' => $chemistry,
+            'history'=> $history,
 
-            //   $totalScore = DB::table('subjects')->where('user_id', $id)->get();
-            //   $total =Subject::where('user_id', $id)->sum('maths', 'english', 'physics','chemistry', 'history')->get()->id;
-            //   $total = ($totalScore->sum($maths+ $english+ $physics + $chemistry+ $history));
-            // $total = sum($totn);
-            $User_subject = Subject::where('user_id', $id)->first();
+        ]);
+           }
+       
+   
+           
+            $User_subject = Subject::where('user_id', $id)->get()->first();
             $math = $User_subject->maths;
             $english = $User_subject->english;
-            $physics = $User_subject->physics;
+            $physics = $User_subject->physics;  
             $chemistry = $User_subject->chemistry;
             $history = $User_subject->history;
-            $total =$math+$english+$physics+$chemistry+$history;
-
-            Score::create([
+            $total =array_sum([$math+$english+$physics+$chemistry+$history]);
+            $mean_score = $total /5;
+            $median_score = $total/2;
+          
+            // dd($total);
+        
+             if(!$User_subject){
+                  $record=  Score::create([
+                'total_score'=>$total,
                 'student_id'=>$id,
-                'toatal_score'=>$total,
+                'mean_score'=>$mean_score,
+                'median_score'=> $median_score,
             ]);
-        }
+             }else{
+                  $record=  Score::where("student_id", $id)->update([
+                'total_score'=>$total,
+                'student_id'=>$id,
+                'mean_score'=>$mean_score,
+                'median_score'=> $median_score,
+            ]);
+             }
+        
+
+
+    //          try{
+    //    $record=  Score::create([
+    //            'toatal_score'=>89.90,
+           //     'student_id'=>$id,
+    //         ]);
+    //         }catch (\Illuminate\Database\QueryException $exception){
+
+    //      dd($exception->getMessage());
+    // }
+
+        
         
         
         return redirect('students/');
