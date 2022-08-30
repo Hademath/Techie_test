@@ -19,6 +19,7 @@ function createstaircase($n){
 
 createstaircase(20);
 createstaircase(7);
+createstaircase(16);
 
 
 
