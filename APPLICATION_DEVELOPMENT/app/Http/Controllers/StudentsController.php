@@ -104,8 +104,10 @@ class StudentsController extends Controller
             $recordScore=[];
             // $totalScore = Subject::where('user_id', $id)->sum(DB::raw('maths + english + physics + chemistry + history'));
 
-              $totalScore = DB::table('subjects')->where('user_id', $id)->get();
-              $total = ($totalScore->sum($maths+ $english+ $physics + $chemistry+ $history));
+            //   $totalScore = DB::table('subjects')->where('user_id', $id)->get();
+              $total =Subject::where('user_id', $id)->select('maths', 'english', 'physics','chemistry', 'history')->get();
+            //   $total = ($totalScore->sum($maths+ $english+ $physics + $chemistry+ $history));
+            $total = sum($totn);
             Score::create([
                 'student_id'=>$id,
                 'toatal_score'=>$total,
